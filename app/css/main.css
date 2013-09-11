@@ -131,9 +131,14 @@ you can use the generic selector below, but it's slower:
 	content: "\e05f";
 }
 
+a{
+	color: #454545;
+}
+
 body,html{
-	background: #3d3d3d url('../img/low_contrast_linen_@2X.png') repeat top left;
+	/*background: #3d3d3d url('../img/low_contrast_linen_@2X.png') repeat top left;/*
 	/*background: #17202B url('../img/bkg-nas-mexico.png') no-repeat top left;*/
+	background-color: #121212;
 	background-size: 100%;
 	margin: 0;
 	padding: 0;
@@ -157,7 +162,8 @@ header{
 
 header h1{
 	color: #999;
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
+	font-family: 'News Gothic MT';
 	font-size: 3rem;
 	font-weight: 300;
 	margin: 1rem 0rem 1.5rem;
@@ -176,7 +182,7 @@ hr{
 hr.separator-1{
 	background: transparent url('../img/img-hr-backgrpund.png') repeat-x center;
 	border: 0;
-	height: 2px;	
+	height: 2px;
 }
 
 hr.separator-{
@@ -220,21 +226,12 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	padding: 1rem 1rem;
 }
 
-#content #search input{
-	border-radius: 50px;
-	padding-left: 1rem;
-}
-
 #content #buttons{
 	text-align: right;
 }
 
-#content #info{
-
-}
-
 #content #info h4{
-	margin: 1rem 0rem;
+	margin: 0.65rem 0rem;
 }
 
 #main-container{
@@ -242,22 +239,51 @@ ul.nav-departmet  ul.nav-functonal-area li{
 }
 
 #navigation{
-	background-color: #090C10;	
-	font-family: 'Open Sans';
+	background-color: #2A2A2A;	
+	/*font-family: 'Open Sans';*/
+	font-family: 'News Gothic MT';
 	font-weight: 300;
 	padding: 1rem 0rem;
+	position: relative;
 }
 
 #navigation h3{
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
+	font-family: 'News Gothic MT';
 	font-size: 1.5rem;
 	font-weight: 300;
 	color: #d3d3d3;
-	margin: 0rem 0.5rem 0.9rem 1rem;
+	margin: 1rem 0.5rem 0.9rem 1rem;
 }
 
 #navigation nav{
 	margin: 1rem 0rem;
+}
+
+#search-form{
+	margin: 0.3rem auto;
+	width: 90%;
+}
+
+#search-form input{
+	border-radius: 50px;
+	height: 26px;
+	margin-bottom: 1.3rem;
+	padding-left: 0.8rem;
+}
+
+#tools{
+	background: -webkit-linear-gradient(top, #F3F3F3, #D8D8D8);
+	border: 1px solid #969696;
+	border-radius: 5px;
+	margin: 1rem 0rem 2rem;
+	padding: 0.6rem 0.4rem;
+	text-align: right;
+}
+
+#tools a{
+	padding: 0.5rem;
+	text-align: center;
 }
 
 .arrow-left {
@@ -266,6 +292,9 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
 	border-right:10px solid white; 
+	position: absolute;
+	right: 0px;
+	top: 145px;
 }
 
 .background{
@@ -278,24 +307,50 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	z-index: -1;
 }
 
-.css-form{
-	
-}
 
 .document-1{
 	background-position: -600px -410px !important;	
 	display: inline-block;
+	position: relative;
 	height: 120px;
 	width: 100px;
 }
 
-.documento-info{
+.document-info{
+	margin-bottom: 2rem;
 	text-align: center;
 }
 
-.documento-info .document-title{
+.document-info .document-title{
 	display: block;
-	font-size: 1rem;
+	font-size: 0.8rem;
+	font-weight: bold;
+	margin-top: 0.5rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.icon-download-document{
+	top: 12px;
+	left: 65px;
+	position: absolute;
+}
+
+.left{
+	float: left !important;	
+}
+
+.page-info{
+	color: #A0A0A0;
+	font-size: 0.8em;
+	font-weight: normal;
+	margin: 0.3rem 0rem 2rem;
+	text-align: center;
+}
+
+.selected{
+	color: #219EDC;
 }
 
 .sprite-image{

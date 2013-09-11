@@ -1,4 +1,8 @@
-angular.module('App', ['App.services', 'App.controllers'])
+'use strict';
+
+var DigitalLibrary = angular.module('DigitalLibrary', []);
+
+/*angular.module('App', ['App.services', 'App.controllers'])
     .config(['$compileProvider', function ($compileProvider) {
         $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
     }])
@@ -15,4 +19,4 @@ angular.module('App', ['App.services', 'App.controllers'])
 			.otherwise({
 				redirectTo: '/'
 			});
-    }]);
+    }]);*/

@@ -1,8 +1,8 @@
-angular.module('App.controllers', [])
+
+
+/*angular.module('App.controllers', [])
 .controller('LoginCtrl', ['$scope', '$location', function ($scope, $location) {
 	$scope.title = 'Digital Library';
-	$scope.connecting = 'Connecting to Device';
-	$scope.ready = 'Device is Ready';
 	
 	$scope.login = function(user) {
 		if (user.username == undefined) {
@@ -21,4 +21,4 @@ angular.module('App.controllers', [])
 .controller('LibraryCtrl', ['$scope', function ($scope) {
 	// Controlador para library
 	// alert('LibraryCtrl');
-}]);
+}]);*/

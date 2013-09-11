@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" ng-app="DigitalLibrary"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="css/normalize.min.css">
         <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel=”shortcut icon” href=”favicon.ico” />
 
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
@@ -21,115 +22,78 @@
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
-        <div class="background"></div>
         <header class="row">
             <div id="header-wrapper">
                 <h1>
                     <a href="/" title="Inicio">                        
-                        Digital <span class="text-bold">Library</span>                 
+                        Digital Library                 
                     </a>
                 </h1>
             </div>         
         </header>    
 
-        <div id="main-container" class="row">
-
+        <div id="main-container" class="row">  
             <aside id="navigation" class="large-3 columns">
-                <h3>Departments</h3>
+                <div id="search">
+                    <form id="search-form">
+                        <input type="search" placeholder="Search documents">
+                    </form>
+                </div>
+
                 <hr class="separator-1">
-                <nav>
+                
+                <h3>Departments</h3>         
+                <nav ng-controller="MenuController">                   
                     <ul class="nav-departmet">
-                        <li><span class="icon-star"></span>   Last Reviewed</li>
-                        <li>
-                            <span class="icon-books"></span>  Front Office
+                        <li><span class="icon-star"></span> <a href="#" title="Last Reviewed">LAST REVIEWED</a></li>
+                        <li ng-repeat="deparment in menu" ng-hide="department.functionalArea.length == 0">
+                            <span class="icon-books"></span> {{deparment.name}}
                             <ul class="nav-functonal-area">
-                                <li><a href="#">Executive Management</a></li>
+                                <li ng-repeat="fa in deparment.functionalArea"><a ng-click="searchDocumentFolder(fa.id, fa.name)">{{fa.name}}</a></li>
                             </ul>
-                        </li> 
-                        <li>
-                            <span class="icon-books"></span>  Policy Group
-                            <ul class="nav-functonal-area">
-                                <li><a href="#">Policy</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="icon-books"></span>  Program Office
-                            <ul class="nav-functonal-area">
-                                <li><a href="#">Project Management</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="icon-books"></span>  Management
-                            <ul class="nav-functonal-area">
-                                <li><a href="#">Office Administration</a></li>
-                                <li><a href="#">Human Resources</a></li>
-                                <li><a href="#">Procurement</a></li>
-                                <li><a href="#">Finances</a></li>
-                                <li><a href="#">Logistics</a></li>
-                                <li><a href="#">IT Support</a></li>
-                                <li><a href="#">COR</a></li>
-                                <li><a href="#">Grants</a></li>
-                            </ul>
-                        </li>                    
+                        </li>                     
                     </ul>
                 </nav>
-            </aside>            
-
+                <div class="arrow-left"></div>
+            </aside>  
             <div id="content" class="large-9 columns">
-
-                <div id="tools" class="row">
-                    <div id="search" class="large-10 columns">
-                        <form id="search-form">
-                            <input type="search" placeholder="Search documents">
-                        </form>
-                    </div>
+                <!--div id="tools" class="row">
                     <div id="buttons" class="large-2 columns">
                         <a href="" title="Grouping View"><span class="icon-icons"></span></a>
                         <a href="" title="List View"><span class="icon-menu"></span></a>
                     </div>
-                </div> 
+                </div--> 
 
-                <hr class="separator-2">
-
-                <div id="info" clas="row">
-                    <h4>Last Reviewed (6)</h4>
-                    <section class="large-3 columns documento-info">
-                        <a href="#" title="" class="sprite-image document-1"></a>
-                        <a href="#" title="" class="document-title">6.1-INL2013-138-13502.pdf</a>
+                <div id="info" clas="row" ng-controller="LibraryController">
+                    <h4>{{subtitle}} ({{elements.totalItems}})</h4>         
+                    <hr class="separator-2">
+                    <div id="tools" class="large-12">
+                        <a href="" title="Grouping View" class="selected"><span class="icon-icons"></span></a>
+                        <a href="" title="List View"><span class="icon-menu"></span></a> | 
+                        <a href="" title="Filters"><span class="icon-filter"></span></a>
+                    </div>                                     
+                    <section ng-repeat="item in elements.items" class="large-3 columns document-info left">
+                        <a href="{{item.url}}" title="{{item.name}}" class="document-title">
+                            <div class="sprite-image document-1">
+                                <span class="icon-cloud-dl icon-download-document"></span>
+                            </div>
+                            <h5 class="document-title"><span class="icon-file-pdf"></span> {{item.name}}</h5>
+                        </a>                        
                     </section>
-                    <section class="large-3 columns documento-info">
-                        <a href="#" title="" class="sprite-image document-1"></a>
-                        <a href="#" title="" class="document-title">6.1-INL2013-138-13502.pdf</a>
-                    </section>
-                    <section class="large-3 columns documento-info">
-                        <a href="#" title="" class="sprite-image document-1"></a>
-                        <a href="#" title="" class="document-title">6.1-INL2013-138-13502.pdf</a>
-                    </section>
-                    <section class="large-3 columns documento-info">
-                        <a href="#" title="" class="sprite-image document-1"></a>
-                        <a href="#" title="" class="document-title">6.1-INL2013-138-13502.pdf</a>
-                    </section>
+                    <div class="large-12 columns page-info">{{elements.items.length}} of {{elements.totalItems}}</div>                    
                 </div>
 
-            </div>           
+            </div>      
         </div>                    
                 
-
-        <footer>
-        </footer>
-
         <script type="text/javascript" src="js/angular.min.js"></script>
         
         <!-- App -->
         <script type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="js/services.js"></script>
-        <script type="text/javascript" src="js/controllers.js"></script>
-        <script type="text/javascript" src="js/controllers/LoginController.js"></script>
-        
-        <script type="text/javascript">
-            app.initialize();
-        </script>
 
-
+        <!-- Controllers -->
+        <script type="text/javascript" src="js/controllers/MenuController.js"></script>
+        <script type="text/javascript" src="js/controllers/LibraryController.js"></script>        
+        <!-- Services -->
     </body>
 </html>
