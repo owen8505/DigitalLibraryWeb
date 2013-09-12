@@ -24,10 +24,6 @@ DigitalLibrary.controller('MenuController',
 				{"id":"11", "name": "Grants"}
 			]}
 		]
-
-		$scope.searchDocumentFolder = function(departmentID, departmentName){
-			$scope.subtitle = departmentName;
-			
-		}
+		
 	}
 );

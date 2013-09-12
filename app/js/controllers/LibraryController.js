@@ -18,7 +18,12 @@ DigitalLibrary.controller('LibraryController',
 			lastID:6,
 			totalItems:6,
 		};
+		
+		$scope.searchDocumentFolder = function(departmentID, departmentName){
+			$scope.subtitle = departmentName;
+			console.log("message");
 			
+		}		
 	}
 
 );
