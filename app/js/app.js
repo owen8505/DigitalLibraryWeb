@@ -1,6 +1,11 @@
 'use strict';
 
-var DigitalLibrary = angular.module('DigitalLibrary', []);
+var DigitalLibrary = angular.module('DigitalLibrary', []).factory('data', [function () {
+	
+	var data = {};
+
+	return data;
+}]);
 
 /*angular.module('App', ['App.services', 'App.controllers'])
     .config(['$compileProvider', function ($compileProvider) {

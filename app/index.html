@@ -68,9 +68,14 @@
                     <h4>{{subtitle}} ({{elements.totalItems}})</h4>         
                     <hr class="separator-2">
                     <div id="tools" class="large-12">
+                        <div id="search-filter">
+                            <form id="search-filter-form">
+                                <input type="search" placeholder="Type a keyword">
+                            </form>
+                        </div>
                         <a href="" title="Grouping View" class="selected"><span class="icon-icons"></span></a>
-                        <a href="" title="List View"><span class="icon-menu"></span></a> | 
-                        <a href="" title="Filters"><span class="icon-filter"></span></a>
+                        <a href="" title="List View"><span class="icon-list-2"></span></a>                         
+                        <div class="clear"></div>
                     </div>                                     
                     <section ng-repeat="item in elements.items" class="large-3 columns document-info left">
                         <a href="{{item.url}}" title="{{item.name}}" class="document-title">

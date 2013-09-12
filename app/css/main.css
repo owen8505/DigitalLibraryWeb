@@ -27,7 +27,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-search, .icon-star, .icon-star-2, .icon-star-3, .icon-lock, .icon-unlocked, .icon-envelope, .icon-home, .icon-remove, .icon-attachment, .icon-info, .icon-menu, .icon-warning, .icon-user, .icon-icons, .icon-link, .icon-help, .icon-ellipsis, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-arrow-up, .icon-file-word, .icon-file-excel, .icon-file-powerpoint, .icon-file-pdf, .icon-books, .icon-book, .icon-bookmark, .icon-cloud-dl, .icon-filter {
+.icon-search, .icon-star, .icon-star-2, .icon-star-3, .icon-lock, .icon-unlocked, .icon-envelope, .icon-home, .icon-remove, .icon-attachment, .icon-info, .icon-menu, .icon-warning, .icon-user, .icon-icons, .icon-link, .icon-help, .icon-ellipsis, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-arrow-up, .icon-file-word, .icon-file-excel, .icon-file-powerpoint, .icon-file-pdf, .icon-books, .icon-book, .icon-bookmark, .icon-cloud-dl, .icon-filter, .icon-list, .icon-list-2 {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -129,6 +129,12 @@ you can use the generic selector below, but it's slower:
 }
 .icon-filter:before {
 	content: "\e05f";
+}
+.icon-list:before {
+	content: "\e001";
+}
+.icon-list-2:before {
+	content: "\e002";
 }
 
 a{
@@ -260,6 +266,27 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	margin: 1rem 0rem;
 }
 
+#search-filter{
+	display: inline-block;
+	float: left;
+	margin-top: 0.3rem;
+	padding: 0px;
+	vertical-align: middle;
+	width: 50%;
+}
+
+#search-filter input{
+	border-radius: 50px;
+	height: 26px;
+	margin: 0px;
+	padding-left: 0.8rem;
+}
+
+#search-filter-form{
+	margin: 0px;
+	padding: 0px;
+}
+
 #search-form{
 	margin: 0.3rem auto;
 	width: 90%;
@@ -277,13 +304,16 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	border: 1px solid #969696;
 	border-radius: 5px;
 	margin: 1rem 0rem 2rem;
-	padding: 0.6rem 0.4rem;
+	padding: 0.4rem 0.4rem;
 	text-align: right;
 }
 
 #tools a{
+	display: inline-block;
+	margin: 0px;
 	padding: 0.5rem;
 	text-align: center;
+	vertical-align: top;
 }
 
 .arrow-left {
@@ -307,6 +337,9 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	z-index: -1;
 }
 
+.clear{
+	clear: both;
+}
 
 .document-1{
 	background-position: -600px -410px !important;	
