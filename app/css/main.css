@@ -27,7 +27,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-search, .icon-star, .icon-star-2, .icon-star-3, .icon-lock, .icon-unlocked, .icon-envelope, .icon-home, .icon-remove, .icon-attachment, .icon-info, .icon-menu, .icon-warning, .icon-user, .icon-icons, .icon-link, .icon-help, .icon-ellipsis, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-arrow-up, .icon-file-word, .icon-file-excel, .icon-file-powerpoint, .icon-file-pdf, .icon-books, .icon-book, .icon-bookmark, .icon-cloud-dl, .icon-filter, .icon-list, .icon-list-2 {
+.icon-search, .icon-star, .icon-star-2, .icon-star-3, .icon-lock, .icon-unlocked, .icon-envelope, .icon-home, .icon-remove, .icon-attachment, .icon-info, .icon-menu, .icon-warning, .icon-user, .icon-icons, .icon-link, .icon-help, .icon-ellipsis, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-arrow-up, .icon-file-word, .icon-file-excel, .icon-file-powerpoint, .icon-file-pdf, .icon-books, .icon-book, .icon-bookmark, .icon-cloud-dl, .icon-filter, .icon-list, .icon-list-2, .icon-at {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -136,6 +136,10 @@ you can use the generic selector below, but it's slower:
 .icon-list-2:before {
 	content: "\e002";
 }
+.icon-at:before {
+	content: "\e003";
+}
+
 
 a{
 	color: #454545;
@@ -226,6 +230,17 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	margin: 0.2rem 0.2rem 0.3rem;
 }
 
+#breadcrumb{
+	color: #A0A0A0;
+	font-size: 0.8em;
+	font-weight: normal;
+	margin: 0rem 0rem 1.5rem;
+}
+
+#breadcrumb a{
+	color: #A0A0A0;
+	text-decoration: underline;
+}
 
 #content{
 	/*background-color: #d3d3d3;*/
@@ -282,6 +297,10 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	padding-left: 0.8rem;
 }
 
+#search-filter input:focus{
+	border: 1px solid #222;
+}
+
 #search-filter-form{
 	margin: 0px;
 	padding: 0px;
@@ -297,6 +316,10 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	height: 26px;
 	margin-bottom: 1.3rem;
 	padding-left: 0.8rem;
+}
+
+#search-form input:focus{
+	border: 1px solid #222;
 }
 
 #tools{
@@ -337,25 +360,36 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	z-index: -1;
 }
 
+.button {
+	border-radius: 2px;
+	border: 1px solid transparent;
+	padding: 0.5rem 1rem;
+}
+
+.button-orange{
+	background-color: #d14836;
+	color: #fff;
+}
+
+.button-gray{
+	background-color: #b8bbbb;
+	color: #2A2A2A;
+}
+
+
 .clear{
 	clear: both;
 }
 
-.document-1{
-	background-position: -600px -410px !important;	
-	display: inline-block;
-	position: relative;
-	height: 120px;
-	width: 100px;
-}
-
 .document-info{
-	margin-bottom: 2rem;
-	text-align: center;
+	background-color: #fff;
+	border: 1px solid #fff;
+	cursor: pointer;
+	margin-bottom: 1rem;
+	padding: 1rem;
 }
 
-.document-info .document-title{
-	display: block;
+.document-info h5{
 	font-size: 0.8rem;
 	font-weight: bold;
 	margin-top: 0.5rem;
@@ -364,10 +398,134 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	white-space: nowrap;
 }
 
+.error{
+	font-size: 0.8rem;
+	font-weight: normal;
+	padding: 2rem;
+}
+
+.error span{
+	display: block;	
+	padding: 2rem 0rem 1rem;
+	text-align: center;
+}
+
+.error span.error-description{
+	font-size: 2rem;
+}
+
+.error-white{
+	color: #707777;
+}
+
+.large-3 h5.document-title{
+	display: block;
+}
+
+.large-12 h5.document-title{
+	display: inline-block;
+	vertical-align: top;
+}
+
+.large-3 .document{
+	background-position: -600px -410px !important;	
+	display: inline-block;
+	position: relative;
+	height: 120px;
+	width: 100px;
+}
+
+.large-3 div.document-info-content{
+	text-align: center;
+}
+
+.large-3 .folder{
+	background-position: 0px -420px !important;	
+	display: inline-block;
+	position: relative;
+	height: 120px;
+	width: 100px;
+}
+
+.large-3 .sprite-image{
+	background: transparent url('../img/img-sprite.png') no-repeat;
+	background-size: 800px;
+}
+
+
+.large-3 div.document-info{
+	text-align: left;
+}
+
+.large-12 .document{
+	background-position: -150px -102.5px !important;	
+	display: inline-block;
+	position: relative;
+	height: 30px;
+	width: 25px;
+}
+
+.large-12 .folder{
+	background-position: 0px 0px !important;	
+	display: inline-block;
+	position: relative;
+	height: 30px;
+	width: 25px;
+}
+
+.large-12 .sprite-image{
+	background: transparent url('../img/img-sprite.png') no-repeat;
+	background-size: 200px;
+}
+
+.document-info:hover{
+	background-color: #89A8C6;
+	border: 1px solid #5B7AA9;
+	border-radius: 5px;
+	color: #fff;
+	text-shadow: 1px 1px 5px #5B7AA9;
+}
+
+.document-info:hover h5{
+	color: #fff;
+}
+
+.document-info:hover .icon-element-information{
+	display: block;
+	text-shadow: 1px 1px 5px #5B7AA9;
+}
+
+.document-info:hover .icon-element-samepage{
+	display: block;
+	text-shadow: 1px 1px 5px #5B7AA9;
+}
+
 .icon-download-document{
 	top: 12px;
 	left: 65px;
 	position: absolute;
+}
+
+.icon-element-samepage{
+	display: none;
+	top: 32px;
+	right: 10px;
+	position: absolute;
+}
+
+.icon-element-samepage:hover{
+	color: #5B7AA9;
+}
+
+.icon-element-information{
+	display: none;
+	top: 8px;
+	right: 10px;
+	position: absolute;
+}
+
+.icon-element-information:hover{
+	color: #5B7AA9;
 }
 
 .left{
@@ -378,7 +536,12 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	color: #A0A0A0;
 	font-size: 0.8em;
 	font-weight: normal;
-	margin: 0.3rem 0rem 2rem;
+	margin: 1.5rem 0rem 2rem;
+	text-align: center;
+}
+
+.pagination{
+	margin-top: 2rem;
 	text-align: center;
 }
 
@@ -386,9 +549,17 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	color: #219EDC;
 }
 
-.sprite-image{
-	background: transparent url('../img/img-sprite.png') no-repeat;
-	background-size: 800px;
+.spiner{
+	margin: 2rem 0rem;
+	text-align: center;
+}
+
+.spiner-white{
+	color: #fff;
+}
+
+.spiner-gray{
+	color: #2A2A2A;
 }
 
 .text-bold{

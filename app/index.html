@@ -43,62 +43,95 @@
                 <hr class="separator-1">
                 
                 <h3>Departments</h3>         
-                <nav ng-controller="MenuController">                   
-                    <ul class="nav-departmet">
-                        <li><span class="icon-star"></span> <a href="#" title="Last Reviewed">LAST REVIEWED</a></li>
+                <nav ng-controller="MenuController">
+                    <div class="spiner spiner-white" ng-show="menuLoading"><img src="img/ajax-loader-gray.gif" alt="Loading data..."> Updating data...</div>                 
+                    <ul class="nav-departmet" ng-show="!error">
+                        <li ng-show="!menuLoading"><span class="icon-bookmark"></span> <a ng-click="getLastViewed()" title="Last Viewed">Last Viewed</a></li>
                         <li ng-repeat="deparment in menu" ng-hide="department.functionalArea.length == 0">
                             <span class="icon-books"></span> {{deparment.name}}
                             <ul class="nav-functonal-area">
-                                <li ng-repeat="fa in deparment.functionalArea"><a ng-click="searchDocumentFolder(fa.id, fa.name)">{{fa.name}}</a></li>
+                                <li ng-repeat="fa in deparment.functionalArea"><a ng-click="searchDocumentFolder(fa.name, fa.url)">{{fa.name}}</a></li>
                             </ul>
                         </li>                     
                     </ul>
-                </nav>
-                <div class="arrow-left"></div>
-            </aside>  
-            <div id="content" class="large-9 columns">
-                <!--div id="tools" class="row">
-                    <div id="buttons" class="large-2 columns">
-                        <a href="" title="Grouping View"><span class="icon-icons"></span></a>
-                        <a href="" title="List View"><span class="icon-menu"></span></a>
+                    <div ng-show="error" class="error error-white">
+                        <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.
+                        <span><a ng-click="getMenu()" title="Try again" class="button button-orange">Try again</a></span>
                     </div>
-                </div--> 
+                </nav>
+                <div MenuPointerDirective class="arrow-left"></div>
+            </aside>  
 
-                <div id="info" clas="row" ng-controller="LibraryController">
-                    <h4>{{subtitle}} ({{elements.totalItems}})</h4>         
-                    <hr>
-                    <div id="tools" class="large-12">
+            <div id="content" class="large-9 columns" ng-controller="LibraryController">                                
+                
+                <div id="info" clas="row">
+                    <h4 ng-show="!dataLoading">{{subtitle}} ({{totalItems}})</h4>
+                    <hr ng-show="!dataLoading">
+                    <div id="tools" class="large-12 columns" ng-show="toolsVisibility">
                         <div id="search-filter">
                             <form id="search-filter-form">
                                 <input type="search" placeholder="Type a keyword">
                             </form>
                         </div>
-                        <a href="" title="Grouping View" class="selected"><span class="icon-icons"></span></a>
-                        <a href="" title="List View"><span class="icon-list-2"></span></a>                         
+                        <a ng-click="switchView('group')" title="Table View" ng-class="{true:'selected', false:''}[view=='large-3']"><span class="icon-icons"></span></a>
+                        <a ng-click="switchView('list')" title="List View" ng-class="{true:'selected', false:''}[view=='large-12']"><span class="icon-list-2"></span></a>                         
                         <div class="clear"></div>
-                    </div>                                     
-                    <section ng-repeat="item in elements.items" class="large-3 columns document-info left">
-                        <a href="{{item.url}}" title="{{item.name}}" class="document-title">
-                            <div class="sprite-image document-1">
-                                <span class="icon-cloud-dl icon-download-document"></span>
-                            </div>
-                            <h5 class="document-title"><span class="icon-file-pdf"></span> {{item.name}}</h5>
-                        </a>                        
-                    </section>
-                    <div class="large-12 columns page-info">{{elements.items.length}} of {{elements.totalItems}}</div>                    
-                </div>
+                    </div>
 
-            </div>      
-        </div>                    
+                    <!--div id="breadcrumb" class="large-12">
+                        <a href="#" title> Digital Library</a> / {{subtitle}}
+                    </div-->
+
+                    <section ng-show="typeDocument == 'folder' && toolsVisibility" ng-repeat="folder in elements" class="{{view}} columns document-info left" ng-click="searchDocuments(folder.id, folder.name, departmentName, folder.url, 64000, 0)" >                        
+                        <div class="document-info-content">
+                            <a href="{{folder.url}}" title="View in S@mepage" target="_blank"><span class="icon-at icon-element-samepage"></span></a>
+                            <a href="#" ng-click="showInformation($event)" title="Information"><span class="icon-info icon-element-information"></span></a>
+                            <div class="sprite-image {{typeDocument}}">
+                                <!--span class="icon-cloud-dl icon-download-document"></span-->
+                            </div>
+                            <h5 class="document-title"> {{folder.name}}</h5>                                            
+                        </div>
+                    </section>
+                    
+                    <section ng-show="typeDocument == 'document' && toolsVisibility" ng-repeat="document in elements" class="{{view}} columns document-info left" ng-click="openDocument(document)" >
+                        <div class="document-info-content">                            
+                            <a ng-click="sendMail(document.name, document.url, $event);" title="Share Document"><span class="icon-envelope icon-element-samepage"></span></a>
+                            <a ng-click="showInformation($event)" title="Information"><span class="icon-info icon-element-information"></span></a>
+                            <div class="sprite-image {{typeDocument}}">
+                                <!--span class="icon-cloud-dl icon-download-document"></span-->
+                            </div>
+                            <h5 class="document-title">{{document.name}}</h5> 
+                        </div>                  
+                    </section>                    
+
+                    <div class="spiner spiner-gray" ng-show="dataLoading"><img src="img/ajax-loader-white.gif" alt="Loading data..."> Updating data, please wait...</div>
+                    <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems)" title="Get more items" class="button button-gray">Get more items</a></div>
+                    <div class="large-12 columns page-info" ng-show="toolsVisibility">{{totalDisplayedItems}} of {{totalItems}}</div>                                        
+                    <div ng-show="error" class="error error-white">
+                        <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.
+                        <span><a ng-click="" title="Try again" class="button button-orange">Try again</a></span>
+                    </div>
+
+                </div>      
+            </div>  
+        </div>               
                 
         <script type="text/javascript" src="js/angular.min.js"></script>
-        
+        <script type="text/javascript" src="js/angular-resource.js"></script>
+        <script type="text/javascript" src="js/angular-cookies.js"></script>
         <!-- App -->
         <script type="text/javascript" src="js/app.js"></script>
 
+        <!-- Services -->
+        <script type="text/javascript" src="js/services/MenuService.js"></script>
+        <script type="text/javascript" src="js/services/SearchService.js"></script>        
+
         <!-- Controllers -->
         <script type="text/javascript" src="js/controllers/MenuController.js"></script>
-        <script type="text/javascript" src="js/controllers/LibraryController.js"></script>        
-        <!-- Services -->
+        <script type="text/javascript" src="js/controllers/LibraryController.js"></script> 
+
+        <!-- Directives -->
+        <script type="text/javascript" src="js/directives/MenuPointerDirective.js"></script>
+
     </body>
 </html>

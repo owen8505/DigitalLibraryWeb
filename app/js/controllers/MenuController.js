@@ -1,29 +1,34 @@
 'use strict';
 
 DigitalLibrary.controller('MenuController', 
-	function MenuController($scope){
+	function MenuController($scope, MenuService, SearchService){
 
-		$scope.menu = [
-			{"id":"1", "name": "Front Office", "functionalArea": [
-				{"id":"1", "name": "Executive Management"}]
-			},
-			{"id":"2", "name": "Policy Group", "functionalArea": [
-				{"id":"2", "name": "Policy"}
-			]},
-			{"id":"3", "name": "Program Office", "functionalArea": [
-				{"id":"3", "name": "Project Management"}
-			]},
-			{"id":"4", "name": "Management", "functionalArea": [
-				{"id":"4", "name": "Office Administration"},
-				{"id":"5", "name": "Human Resources"},
-				{"id":"6", "name": "Procurement"},
-				{"id":"7", "name": "Finances"},
-				{"id":"8", "name": "Logistics"},
-				{"id":"9", "name": "IT Support"},
-				{"id":"10", "name": "COR"},
-				{"id":"11", "name": "Grants"}
-			]}
-		]
-		
+		$scope.menuLoading = true;
+		MenuService.getMenu();
+
+		$scope.getMenu = function(){
+			$scope.menuLoading = true;
+			$scope.error = false;
+			MenuService.getMenu();
+		};
+
+		$scope.$on('handleMenuChange', function(){
+			$scope.menu = MenuService.menu;
+			$scope.menuLoading = MenuService.menuLoading;
+			$scope.error = MenuService.error;
+		});
+
+		$scope.$on('handleMenuError', function(){
+			$scope.menuLoading = MenuService.menuLoading;
+			$scope.error = MenuService.error;
+		});
+
+		$scope.searchDocumentFolder = function(departmentName, siteURL){						
+			SearchService.getDocumentFolder(departmentName, siteURL);
+		};
+
+		$scope.getLastViewed = function(){
+			SearchService.getLastViewed();
+		};
 	}
 );

@@ -2,28 +2,97 @@
 
 DigitalLibrary.controller('LibraryController',
 	
-	function MenuController($scope){
-
-		$scope.subtitle = "Last Reviewed";
-		$scope.elements = {
-			id: 0,
-			items: [
-				{id:"1",name:"6.1-INL2013-138-13502.pdf",type:"document",creationDate:"08/23/2013",modified:"08/23/2013", modifiedBy:"López, Erik", projectCode:"IN41MX70", acquisitionID:"284", referenceID:"",pr:"SMX53012F0008",po:"SMX53012F0008",agency:"",recipient:"SSP",subrecipient:"SSP - PF",country:"",projectCoordinator:"",url:"sites/DigitalLibrary/PP/Logistics/FEP"},
-				{id:"2",name:"6.1-INL2013-138-15284.pdf",type:"document",creationDate:"08/23/2013",modified:"08/23/2013", modifiedBy:"López, Erik", projectCode:"IN41MX70", acquisitionID:"284", referenceID:"",pr:"SMX53012F0008",po:"SMX53012F0008",agency:"",recipient:"SSP",subrecipient:"SSP - PF",country:"",projectCoordinator:"",url:"sites/DigitalLibrary/PP/Logistics/FEP"},
-				{id:"3",name:"6.1-NAS2013-138-7415.pdf",type:"document",creationDate:"08/23/2013",modified:"08/23/2013", modifiedBy:"López, Erik", projectCode:"IN41MX70", acquisitionID:"284", referenceID:"",pr:"SMX53012F0008",po:"SMX53012F0008",agency:"",recipient:"SSP",subrecipient:"SSP - PF",country:"",projectCoordinator:"",url:"sites/DigitalLibrary/PP/Logistics/FEP"},
-				{id:"4",name:"6.1-NAS2012-138-330.pdf",type:"document",creationDate:"08/23/2013",modified:"08/23/2013", modifiedBy:"López, Erik", projectCode:"IN41MX70", acquisitionID:"284", referenceID:"",pr:"SMX53012F0008",po:"SMX53012F0008",agency:"",recipient:"SSP",subrecipient:"SSP - PF",country:"",projectCoordinator:"",url:"sites/DigitalLibrary/PP/Logistics/FEP"},
-				{id:"5",name:"6.2-NAS2013-138-8493.pdf",type:"document",creationDate:"08/23/2013",modified:"08/23/2013", modifiedBy:"López, Erik", projectCode:"IN41MX70", acquisitionID:"284", referenceID:"",pr:"SMX53012F0008",po:"SMX53012F0008",agency:"",recipient:"SSP",subrecipient:"SSP - PF",country:"",projectCoordinator:"",url:"sites/DigitalLibrary/PP/Logistics/FEP"},
-				{id:"6",name:"6.1-NAS2012-138-5932.pdf",type:"document",creationDate:"08/23/2013",modified:"08/23/2013", modifiedBy:"López, Erik", projectCode:"IN41MX70", acquisitionID:"284", referenceID:"",pr:"SMX53012F0008",po:"SMX53012F0008",agency:"",recipient:"SSP",subrecipient:"SSP - PF",country:"",projectCoordinator:"",url:"sites/DigitalLibrary/PP/Logistics/FEP"}
-			],
-			lastID:6,
-			totalItems:6,
-		};
+	function LibraryController($scope, SearchService){
 		
-		$scope.searchDocumentFolder = function(departmentID, departmentName){
-			$scope.subtitle = departmentName;
-			console.log("message");
+		$scope.elements = {};
+		$scope.view = "large-3";
+		$scope.departmentName = "";
+
+		$scope.dataLoading = false;
+		$scope.noElements = true;		
+		$scope.firstLoad = false;
+
+		$scope.titleVisibility = false;
+		//$scope.folderSectionVisibility = false;
+		//$scope.documentSectionVisibility = false;
+		$scope.toolsVisibility = false;
+		$scope.sectionVisibility = false;
+
+		$scope.setVisibility = function(){
+			//console.log("Hay elementos:" + $scope.noElements + " Esta cargando:" + $scope.dataLoading  + " Es la primera vez:" + $scope.firstLoad);			
 			
-		}		
-	}
+			//Mostrar si hay elementos y no está cargando o si hay elementos y no es la primera vez
+			if((!$scope.noElements && !$scope.dataLoading) || (!$scope.noElements && !$scope.firstLoad)){
+				//console.log("mostrar");
+				$scope.toolsVisibility = true;
+			}else{
+				//console.log("ocultar");
+				$scope.toolsVisibility = false;
+			}
+
+
+		};
+
+		$scope.setVisibility();
+		SearchService.getLastViewed();			
+
+		$scope.showInformation = function($event){
+			$event.cancelBubble = true;
+		}
+
+		$scope.sendMail = function(documentName, mail, $event){
+			$event.cancelBubble = true;
+			window.open('mailto:?subject=Document%20Shared&body=I%20would%20like%20to%20share%20this%20document%20with%20you%20' + documentName + ',%20please,%20click%20in%20the%20next%20link%20in%20order%20to%20download%20it%20' + mail);
+		}
+
+		$scope.openDocument = function(document){
+			window.open(document.url);			
+			SearchService.setLastViewed(document);
+
+		};
+
+		$scope.searchDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems){			
+			SearchService.getDocuments(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems);			
+		};
+
+		$scope.switchView = function(view){
+			if(view== "group"){
+				$scope.view = "large-3";
+			}else{
+				$scope.view = "large-12";
+			}
+		};
+
+		$scope.$on('handleDataStatus', function(){
+			$scope.error = SearchService.error;
+			$scope.firstLoad = SearchService.firstLoad;
+			$scope.dataLoading = SearchService.dataLoading;	
+
+			$scope.setVisibility();
+		});
+
+		$scope.$on('handleDataChange', function(totalDisplayedItems){							
+			$scope.firstLoad = SearchService.firstLoad;
+			$scope.noElements = SearchService.noElements;
+			$scope.lastFolder = SearchService.lastFolder;
+			$scope.totalDisplayedItems = SearchService.totalDisplayedItems;
+			$scope.dataLoading = SearchService.dataLoading;
+			$scope.error = SearchService.error;
+
+			$scope.setVisibility();
+
+			if($scope.firstLoad){							
+				$scope.subtitle = SearchService.subtitle;
+				$scope.typeDocument = SearchService.typeDocument;							
+				$scope.departmentName = SearchService.departmentName;				
+				$scope.totalItems = SearchService.totalItems;
+				$scope.lastFolder = SearchService.lastFolder;	
+				$scope.elements = SearchService.elements;
+			}else{
+				$scope.elements = $scope.elements.concat(SearchService.elements);
+			}			
+		});
+
+	}	
 
 );
