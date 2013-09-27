@@ -1,10 +1,6 @@
-DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookieStore, $q) {
+DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookieStore, $q, CONFIG) {
 
-	var SERVICE_DOCUMENT_FOLDER_URL = 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Libraries?w=:w';
-	var SERVICE_DOCUMENT_URL = 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Documents?w=:w&l=:l&b=:b&i=:i';
-	var DOCUMENT_BATCH = 20;
 
-	//Response Service Object
 	var data = {};
 	data.elements = {};
 	data.subtitle = "";
@@ -32,14 +28,15 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 
 		var deferred = $q.defer();
 		var DocumentServicePromise = deferred.promise;
-		var DocumentService = $resource(SERVICE_DOCUMENT_URL,{})
-		.get({w:siteURL,l:libraryID,b:DOCUMENT_BATCH,i:lastID},
+		var DocumentService = $resource(CONFIG.SERVICE_DOCUMENT_URL,{})
+		.get({w:siteURL,l:libraryID,b:CONFIG.DOCUMENT_BATCH,i:lastID},
 
 			success = function(event){	
 				deferred.resolve(event);
 			},
 
 			error = function(respose){
+				error = false;
 				console.log("Error retreving the data");
 			}
 		);
@@ -51,10 +48,10 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				data.elements = event.GetDocumentsResult.items;
 				data.totalItems = event.GetDocumentsResult.totalItems;
 
-				if(data.totalItems < DOCUMENT_BATCH){
+				if(data.totalItems < CONFIG.DOCUMENT_BATCH){
 					data.totalDisplayedItems = data.totalItems;
 				}else{
-					data.totalDisplayedItems = data.totalDisplayedItems + DOCUMENT_BATCH;
+					data.totalDisplayedItems = data.totalDisplayedItems + CONFIG.DOCUMENT_BATCH;
 				}
 
 				data.typeDocument = "document";
@@ -88,7 +85,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 
 		var deferred = $q.defer();
 		var DocumentFolderServicePromise = deferred.promise;
-		var DocumentFolderService = $resource(SERVICE_DOCUMENT_FOLDER_URL,{})
+		var DocumentFolderService = $resource(CONFIG.SERVICE_DOCUMENT_FOLDER_URL,{})
 		.get({w:siteURL},
 
 			success = function(event){
@@ -141,6 +138,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 		};
 
 		error = function(reponse){
+			data.error = false;
 			deferred.reject(response);
 		};
 
@@ -166,7 +164,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 					data.totalDisplayedItems = 0;
 					data.noElements = true;
 				}else{
-					data.elements = elements;
+					data.elements = elements.reverse();
 					data.totalItems = data.elements.length;
 					data.totalDisplayedItems = data.totalItems;
 					data.noElements = false;				
@@ -184,17 +182,16 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 	};
 
 	data.setLastViewed = function(document){
-		var elements = $cookieStore.get('lastViewedCookie');
-		if(typeof elements == 'undefined'){
+		var elements = $cookieStore.get('lastViewedCookie');		
+		if(typeof elements == 'undefined'){			
 			elements = [];
 			elements.push(document);
 			$cookieStore.put('lastViewedCookie', elements);
 		}else{			
-			if(elements.length < 5){
-				console.log(data.isContained(elements,document));
+			if(elements.length < 5 && !(data.isContained(elements,document))){
 				elements.push(document);				
 				$cookieStore.put('lastViewedCookie', elements);					
-			}else{
+			}else if(data.isContained(elements,document)){
 				elements.shift();
 				elements.push(document);
 				$cookieStore.put('lastViewedCookie', elements);
@@ -204,8 +201,8 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 
 	data.isContained = function(list,element){
 		var contained = false;
-		for(var index=0; index<element.length; index++){
-			if(list[index].name == element.name){
+		for(var index=0; index<list.length; index++){
+			if(list[index].name == element.name){				
 				contained = true;
 				break;
 			}

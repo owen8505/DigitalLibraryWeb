@@ -8,6 +8,7 @@ DigitalLibrary.controller('LibraryController',
 		$scope.view = "large-3";
 		$scope.departmentName = "";
 
+		//Visibility variables
 		$scope.dataLoading = false;
 		$scope.noElements = true;		
 		$scope.firstLoad = false;
@@ -17,6 +18,8 @@ DigitalLibrary.controller('LibraryController',
 		//$scope.documentSectionVisibility = false;
 		$scope.toolsVisibility = false;
 		$scope.sectionVisibility = false;
+		$scope.noDataAlertVisibility = false;
+		$scope.informationSection = false;
 
 		$scope.setVisibility = function(){
 			//console.log("Hay elementos:" + $scope.noElements + " Esta cargando:" + $scope.dataLoading  + " Es la primera vez:" + $scope.firstLoad);			
@@ -30,19 +33,32 @@ DigitalLibrary.controller('LibraryController',
 				$scope.toolsVisibility = false;
 			}
 
+			if($scope.noElements && !$scope.dataLoading){
+				$scope.noDataAlertVisibility = true;
+			}else{
+				$scope.noDataAlertVisibility = false;
+			}
 
 		};
 
 		$scope.setVisibility();
 		SearchService.getLastViewed();			
 
-		$scope.showInformation = function($event){
+		$scope.showInformation = function(element, $event){
 			$event.cancelBubble = true;
+			$scope.informationSection = true;
+			$scope.dataInformation = element;
 		}
 
-		$scope.sendMail = function(documentName, mail, $event){
+		$scope.sendMail = function(documentName, documentURL, $event){
 			$event.cancelBubble = true;
-			window.open('mailto:?subject=Document%20Shared&body=I%20would%20like%20to%20share%20this%20document%20with%20you%20' + documentName + ',%20please,%20click%20in%20the%20next%20link%20in%20order%20to%20download%20it%20' + mail);
+
+			var mail = ""
+			mail = 'mailto:' +
+				   '?subject=' + escape('Document Shared') +								   
+				   '&body=' + escape('I would like to share this document with you') + documentName + escape('. \n\nPlease, click in the next link in order to download it: ') +  documentURL;
+
+			window.location.href = mail;
 		}
 
 		$scope.openDocument = function(document){

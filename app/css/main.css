@@ -200,7 +200,6 @@ hr.separator-2{
 	border: 0;
 	height: 2px;
 }
-
 ul.nav-departmet{
 	margin: 1rem;
 	padding: 0px;
@@ -253,6 +252,11 @@ ul.nav-departmet  ul.nav-functonal-area li{
 
 #content #info h4{
 	margin: 0.65rem 0rem;
+}
+
+#information-section{
+	border-left: 1px solid #CCC;
+	padding: 0.5rem;
 }
 
 #main-container{

@@ -24,11 +24,7 @@
         <![endif]-->
         <header class="row">
             <div id="header-wrapper">
-                <h1>
-                    <a href="/" title="Inicio">                        
-                        Digital Library                 
-                    </a>
-                </h1>
+                <h1>Digital Library</h1>
             </div>         
         </header>    
 
@@ -62,63 +58,85 @@
                 <div MenuPointerDirective class="arrow-left"></div>
             </aside>  
 
-            <div id="content" class="large-9 columns" ng-controller="LibraryController">                                
-                
-                <div id="info" clas="row">
+            <div id="content" class="large-9 columns" ng-controller="LibraryController"> 
+                <div>                               
+                    <!-- Title of the selected section-->
                     <h4 ng-show="!dataLoading">{{subtitle}} ({{totalItems}})</h4>
                     <hr ng-show="!dataLoading">
-                    <div id="tools" class="large-12 columns" ng-show="toolsVisibility">
+
+                    <!-- Breadcrumb -->
+                    <div id="breadcrumb" ng-show="toolsVisibility">
+                            <a ng-click="switchView('list')" title="List View">{{breadcrumb}}</a>
+                    </div>
+
+                    <!-- Tools bar -->
+                    <div id="tools" ng-show="toolsVisibility">
                         <div id="search-filter">
                             <form id="search-filter-form">
-                                <input type="search" placeholder="Type a keyword">
+                                <input type="search" placeholder="Search {{subtitle}}">
                             </form>
                         </div>
                         <a ng-click="switchView('group')" title="Table View" ng-class="{true:'selected', false:''}[view=='large-3']"><span class="icon-icons"></span></a>
                         <a ng-click="switchView('list')" title="List View" ng-class="{true:'selected', false:''}[view=='large-12']"><span class="icon-list-2"></span></a>                         
                         <div class="clear"></div>
                     </div>
+                </div>                
 
-                    <!--div id="breadcrumb" class="large-12">
-                        <a href="#" title> Digital Library</a> / {{subtitle}}
-                    </div-->
-
-                    <section ng-show="typeDocument == 'folder' && toolsVisibility" ng-repeat="folder in elements" class="{{view}} columns document-info left" ng-click="searchDocuments(folder.id, folder.name, departmentName, folder.url, 64000, 0)" >                        
-                        <div class="document-info-content">
-                            <a href="{{folder.url}}" title="View in S@mepage" target="_blank"><span class="icon-at icon-element-samepage"></span></a>
-                            <a href="#" ng-click="showInformation($event)" title="Information"><span class="icon-info icon-element-information"></span></a>
-                            <div class="sprite-image {{typeDocument}}">
-                                <!--span class="icon-cloud-dl icon-download-document"></span-->
+                <!-- Sección que contiene los elementos -->
+                <div id="info" class="rows">
+                    <div id="information-section" ng-show="!informationSection">
+                        <table>
+                            <thead><tr><th></th></tr></thead>
+                            
+                        </table>
+                    </div>                                    
+                    <div>                                                                        
+                        <div></div>
+                        <section ng-show="typeDocument == 'folder' && toolsVisibility" ng-repeat="folder in elements" class="{{view}} columns document-info left" ng-click="searchDocuments(folder.id, folder.name, departmentName, folder.url, 64000, 0)" >                        
+                            <div class="document-info-content">
+                                <a href="{{folder.url}}" title="View in S@mepage" target="_blank"><span class="icon-at icon-element-samepage"></span></a>
+                                <a href="#" ng-click="showInformation(folder, $event)" title="Information"><span class="icon-info icon-element-information"></span></a>
+                                <div class="sprite-image {{typeDocument}}">
+                                    <!--span class="icon-cloud-dl icon-download-document"></span-->
+                                </div>
+                                <h5 class="document-title"> {{folder.name}}</h5>                                                                         
                             </div>
-                            <h5 class="document-title"> {{folder.name}}</h5>                                            
+                        </section>                    
+                        
+                        <section ng-show="typeDocument == 'document' && toolsVisibility" ng-repeat="document in elements" class="{{view}} columns document-info left" ng-click="openDocument(document)" >
+                            <div class="document-info-content">                            
+                                <a ng-click="sendMail(document.name, document.url, $event);" title="Share Document"><span class="icon-envelope icon-element-samepage"></span></a>
+                                <a ng-click="showInformation(document, $event)" title="Information"><span class="icon-info icon-element-information"></span></a>
+                                <div class="sprite-image {{typeDocument}}">
+                                    <!--span class="icon-cloud-dl icon-download-document"></span-->
+                                </div>
+                                <h5 class="document-title">{{document.name}}</h5> 
+                            </div>                                          
+                        </section>                      
+
+
+                        <div class="spiner spiner-gray" ng-show="dataLoading"><img src="img/ajax-loader-white.gif" alt="Loading data..."> Updating data, please wait...</div>
+                        <div ng-show="noDataAlertVisibility" class="error error-white">
+                            No items in this section. Please try another option.
                         </div>
-                    </section>
-                    
-                    <section ng-show="typeDocument == 'document' && toolsVisibility" ng-repeat="document in elements" class="{{view}} columns document-info left" ng-click="openDocument(document)" >
-                        <div class="document-info-content">                            
-                            <a ng-click="sendMail(document.name, document.url, $event);" title="Share Document"><span class="icon-envelope icon-element-samepage"></span></a>
-                            <a ng-click="showInformation($event)" title="Information"><span class="icon-info icon-element-information"></span></a>
-                            <div class="sprite-image {{typeDocument}}">
-                                <!--span class="icon-cloud-dl icon-download-document"></span-->
-                            </div>
-                            <h5 class="document-title">{{document.name}}</h5> 
-                        </div>                  
-                    </section>                    
-
-                    <div class="spiner spiner-gray" ng-show="dataLoading"><img src="img/ajax-loader-white.gif" alt="Loading data..."> Updating data, please wait...</div>
-                    <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems)" title="Get more items" class="button button-gray">Get more items</a></div>
-                    <div class="large-12 columns page-info" ng-show="toolsVisibility">{{totalDisplayedItems}} of {{totalItems}}</div>                                        
-                    <div ng-show="error" class="error error-white">
-                        <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.
-                        <span><a ng-click="" title="Try again" class="button button-orange">Try again</a></span>
-                    </div>
-
+                        <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems)" title="Get more items" class="button button-gray">Get more items</a></div>
+                        <div class="large-12 columns page-info" ng-show="toolsVisibility">{{totalDisplayedItems}} of {{totalItems}}</div>                                        
+                        <div ng-show="error" class="error error-white">
+                            <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.
+                            <span><a ng-click="" title="Try again" class="button button-orange">Try again</a></span>
+                        </div>
+                    </div>                   
                 </div>      
             </div>  
         </div>               
-                
+        
+        <!-- External Modules -->     
         <script type="text/javascript" src="js/angular.min.js"></script>
         <script type="text/javascript" src="js/angular-resource.js"></script>
         <script type="text/javascript" src="js/angular-cookies.js"></script>
+        <script type="text/javascript" src="js/UI/ui-bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/UI/ui-bootstrap-tpls.min.js"></script>
+
         <!-- App -->
         <script type="text/javascript" src="js/app.js"></script>
 
