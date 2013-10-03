@@ -41,12 +41,12 @@
                 <h3>Departments</h3>         
                 <nav ng-controller="MenuController">
                     <div class="spiner spiner-white" ng-show="menuLoading"><img src="img/ajax-loader-gray.gif" alt="Loading data..."> Updating data...</div>                 
-                    <ul class="nav-departmet" ng-show="!error">
+                    <ul class="nav-department" ng-show="!error">
                         <li ng-show="!menuLoading"><span class="icon-bookmark"></span> <a ng-click="getLastViewed()" title="Last Viewed">Last Viewed</a></li>
-                        <li ng-repeat="deparment in menu" ng-hide="department.functionalArea.length == 0">
+                        <li ng-repeat="department in menu" ng-hide="department.functionalArea.length == 0">
                             <span class="icon-books"></span> {{deparment.name}}
                             <ul class="nav-functonal-area">
-                                <li ng-repeat="fa in deparment.functionalArea"><a ng-click="searchDocumentFolder(fa.name, fa.url)">{{fa.name}}</a></li>
+                                <li ng-repeat="fa in department.functionalArea"><a ng-click="searchDocumentFolder(fa.name, fa.url)">{{fa.name}}</a></li>
                             </ul>
                         </li>                     
                     </ul>
@@ -161,6 +161,10 @@
             </div>  
         </div>               
         
+
+        <!-- jQuery -->
+        <script type="text/javascript" src="js/vendor/jquery-1.10.1.min.js"></script>
+
         <!-- External Modules -->     
         <script type="text/javascript" src="js/angular.min.js"></script>
         <script type="text/javascript" src="js/angular-resource.js"></script>

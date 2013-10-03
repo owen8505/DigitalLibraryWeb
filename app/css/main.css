@@ -216,12 +216,12 @@ table th{
 	width: 30%;
 }
 
-ul.nav-departmet{
+ul.nav-department{
 	margin: 1rem;
 	padding: 0px;
 }
 
-ul.nav-departmet > li{
+ul.nav-department > li{
 	color: #707777;
 	font-size: 1rem;
 	font-weight: normal;
@@ -229,7 +229,7 @@ ul.nav-departmet > li{
 	text-transform: uppercase;
 }
 
-ul.nav-departmet  ul.nav-functonal-area{
+ul.nav-department  ul.nav-functonal-area{
 	color: #b8bbbb;
 	font-size: 0.9rem;
 	font-weight: 300;
@@ -237,11 +237,11 @@ ul.nav-departmet  ul.nav-functonal-area{
 	text-transform: none;
 }
 
-ul.nav-departmet  ul.nav-functonal-area a{
+ul.nav-department  ul.nav-functonal-area a{
 	color: #b8bbbb;
 }
 
-ul.nav-departmet  ul.nav-functonal-area li{
+ul.nav-department  ul.nav-functonal-area li{
 	margin: 0.2rem 0.2rem 0.3rem;
 }
 
