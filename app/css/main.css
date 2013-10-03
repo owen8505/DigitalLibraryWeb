@@ -200,6 +200,22 @@ hr.separator-2{
 	border: 0;
 	height: 2px;
 }
+
+table{
+	border-left: none;
+	border-right: none;
+	width: 100%;
+}
+
+table caption{
+	margin-bottom: 1rem;
+}
+
+table th{
+	text-align: right;
+	width: 30%;
+}
+
 ul.nav-departmet{
 	margin: 1rem;
 	padding: 0px;
@@ -254,9 +270,47 @@ ul.nav-departmet  ul.nav-functonal-area li{
 	margin: 0.65rem 0rem;
 }
 
+#filter-section{
+	border: 1px solid #CCC;
+	padding: 1rem;
+}
+
+#filter-section > a{
+	color: red;
+	font-size: 0.7rem;
+	float: right;
+}
+
+#filter-section > a:hover{
+	text-decoration: underline;
+}
+
+#filter-section h5{
+	margin-bottom: 0.8rem;
+}
+
+#filter-section span{
+	font-size: 0.8rem;
+}
+
 #information-section{
-	border-left: 1px solid #CCC;
+	border: 1px solid #CCC;
 	padding: 0.5rem;
+}
+
+#information-section > a{
+	color: red;
+	font-size: 0.7rem;
+	float: right;
+}
+
+#information-section > a:hover{
+	text-decoration: underline;
+}
+
+#information-section p{
+	font-size: 0.8rem;
+	text-align: right;
 }
 
 #main-container{
@@ -420,6 +474,10 @@ ul.nav-departmet  ul.nav-functonal-area li{
 
 .error-white{
 	color: #707777;
+}
+
+.filter{
+	border-right: 1px solid #CCC;	
 }
 
 .large-3 h5.document-title{

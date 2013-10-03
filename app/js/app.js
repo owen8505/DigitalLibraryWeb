@@ -11,5 +11,6 @@ var DigitalLibrary = angular.module('DigitalLibrary', ['ngResource','ngCookies']
 	SERVICE_DOCUMENT_FOLDER_URL: 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Libraries?w=:w',
 	SERVICE_DOCUMENT_URL: 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Documents?w=:w&l=:l&b=:b&i=:i',
 	DOCUMENT_BATCH: 20,
-	MESSAGE: 'TESTING CONFIG FILE'
+	MENU_SERVICE_URL: 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Menu',
+	SERVICE_SEARCH_DOCUMENT_URL: 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Menu',	
 });

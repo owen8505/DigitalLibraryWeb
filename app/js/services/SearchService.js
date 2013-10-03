@@ -13,7 +13,27 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 	data.firstLoad = true;
 	data.lastFolder = {};
 
-	data.getDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems){						
+	data.getFilters = function(filtersSelected){
+		var filters = [
+			{'name':'Recipient', 'type':'checkbox', 'options':[{'id':1, 'value':'SSP'},{'id':2, 'value':'SEGOB'}]},
+			{'name':'Recipient', 'type':'checkbox', 'options':[{'id':1, 'value':'SSP'},{'id':2, 'value':'SEGOB'}]},
+		];
+
+		return filters;
+	}
+
+	data.getDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems, filters){						
+		var params = {};
+		var serviceURL = CONFIG.SERVICE_DOCUMENT_URL;
+
+		if(filters == 'undefined'){
+			serviceURL = CONFIG.SERVICE_SEARCH_DOCUMENT_URL;
+			params = {};
+
+		}else{
+			serviceURL = CONFIG.SERVICE_DOCUMENT_URL;
+			params = filters;
+		}
 
 		if(totalDisplayedItems == 0){
 			data.totalDisplayedItems = 0;
@@ -36,7 +56,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 			},
 
 			error = function(respose){
-				error = false;
+				error = true;
 				console.log("Error retreving the data");
 			}
 		);

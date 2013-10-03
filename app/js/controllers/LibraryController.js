@@ -2,7 +2,7 @@
 
 DigitalLibrary.controller('LibraryController',
 	
-	function LibraryController($scope, SearchService){
+	function LibraryController($location, $anchorScroll, $scope, SearchService){
 		
 		$scope.elements = {};
 		$scope.view = "large-3";
@@ -20,6 +20,7 @@ DigitalLibrary.controller('LibraryController',
 		$scope.sectionVisibility = false;
 		$scope.noDataAlertVisibility = false;
 		$scope.informationSection = false;
+		$scope.filtersSection = false;
 
 		$scope.setVisibility = function(){
 			//console.log("Hay elementos:" + $scope.noElements + " Esta cargando:" + $scope.dataLoading  + " Es la primera vez:" + $scope.firstLoad);			
@@ -42,16 +43,38 @@ DigitalLibrary.controller('LibraryController',
 		};
 
 		$scope.setVisibility();
-		SearchService.getLastViewed();			
+		SearchService.getLastViewed();	
+		$scope.filters = SearchService.getFilters();
+
+		$scope.closeFilters = function(){
+			$scope.filtersSection = false;
+		}
+
+		$scope.showFilters = function(){
+			if($scope.filtersSection){
+				$scope.filtersSection = false;
+			}else{
+				$scope.filtersSection = true;
+				$location.hash('top');
+				$anchorScroll();
+			}
+		}
+
+		$scope.closeInformation = function(){
+			$scope.informationSection = false;
+		}
 
 		$scope.showInformation = function(element, $event){
 			$event.cancelBubble = true;
 			$scope.informationSection = true;
 			$scope.dataInformation = element;
+			$location.hash('top');
+			$anchorScroll();
 		}
 
 		$scope.sendMail = function(documentName, documentURL, $event){
 			$event.cancelBubble = true;
+			$scope.informationSection = false;
 
 			var mail = ""
 			mail = 'mailto:' +
@@ -62,13 +85,19 @@ DigitalLibrary.controller('LibraryController',
 		}
 
 		$scope.openDocument = function(document){
+			$scope.informationSection = false;
 			window.open(document.url);			
 			SearchService.setLastViewed(document);
 
 		};
 
-		$scope.searchDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems){			
+		$scope.searchDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems, moreInfo){			
+			$scope.informationSection = false;			
 			SearchService.getDocuments(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems);			
+			if(!moreInfo){
+				$location.hash('top');
+				$anchorScroll();
+			}
 		};
 
 		$scope.switchView = function(view){
@@ -80,14 +109,17 @@ DigitalLibrary.controller('LibraryController',
 		};
 
 		$scope.$on('handleDataStatus', function(){
+			$scope.informationSection = false;
 			$scope.error = SearchService.error;
 			$scope.firstLoad = SearchService.firstLoad;
-			$scope.dataLoading = SearchService.dataLoading;	
+			$scope.dataLoading = SearchService.dataLoading;
 
 			$scope.setVisibility();
 		});
 
-		$scope.$on('handleDataChange', function(totalDisplayedItems){							
+		$scope.$on('handleDataChange', function(totalDisplayedItems){				
+
+			$scope.informationSection = false;						
 			$scope.firstLoad = SearchService.firstLoad;
 			$scope.noElements = SearchService.noElements;
 			$scope.lastFolder = SearchService.lastFolder;

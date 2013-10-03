@@ -1,6 +1,6 @@
-DigitalLibrary.factory('MenuService', function ($rootScope, $resource, $q, $timeout) {
+DigitalLibrary.factory('MenuService', function ($rootScope, $resource, $q, $timeout, CONFIG) {
 
-	var SERVICE_MENU_URL = 'http://sap.mexusbio.org/DigitalLibraryServices/SharePointDataAccess.svc/Menu';
+	var SERVICE_MENU_URL;
 
 	var data = {};
 	data.menu = {};
@@ -14,7 +14,7 @@ DigitalLibrary.factory('MenuService', function ($rootScope, $resource, $q, $time
 		
 		var deferred = $q.defer();
 		var MenuServicePromise = deferred.promise;
-		var MenuService = $resource(SERVICE_MENU_URL,{})
+		var MenuService = $resource(CONFIG.MENU_SERVICE_URL,{})
 		.get({},
 			sucess = function (event){
 				deferred.resolve(event);

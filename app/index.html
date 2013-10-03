@@ -24,7 +24,7 @@
         <![endif]-->
         <header class="row">
             <div id="header-wrapper">
-                <h1>Digital Library</h1>
+                <h1 id="top">Digital Library</h1>
             </div>         
         </header>    
 
@@ -58,7 +58,7 @@
                 <div MenuPointerDirective class="arrow-left"></div>
             </aside>  
 
-            <div id="content" class="large-9 columns" ng-controller="LibraryController"> 
+            <div id="content" class="large-9 columns" ng-controller="LibraryController">                 
                 <div>                               
                     <!-- Title of the selected section-->
                     <h4 ng-show="!dataLoading">{{subtitle}} ({{totalItems}})</h4>
@@ -76,6 +76,7 @@
                                 <input type="search" placeholder="Search {{subtitle}}">
                             </form>
                         </div>
+                        <a ng-click="showFilters()" title="Filters" ng-show="typeDocument == 'document' && subtitle != 'Last Viewed' " ng-class="{true:'selected filter', false:'filter'}[filtersSection]"><span class="icon-filter"></span></a>
                         <a ng-click="switchView('group')" title="Table View" ng-class="{true:'selected', false:''}[view=='large-3']"><span class="icon-icons"></span></a>
                         <a ng-click="switchView('list')" title="List View" ng-class="{true:'selected', false:''}[view=='large-12']"><span class="icon-list-2"></span></a>                         
                         <div class="clear"></div>
@@ -83,12 +84,42 @@
                 </div>                
 
                 <!-- Sección que contiene los elementos -->
-                <div id="info" class="rows">
-                    <div id="information-section" ng-show="!informationSection">
+                <div id="info" class="rows">                    
+                    <div id="filter-section" ng-show="filtersSection">
+                        <a ng-click="closeFilters()">Close</a>
+                        <h5>Filters</h5>       
+                        <div ng-repeat="filter in filters">
+                            <label>{{filter.name}}:</label>
+                            <span ng-repeat="option in filter.options">                          
+                                {{option.value}} <input type="checkbox" value="{{option.id}}">                          
+                            </span>
+                        </div>
+                        <div>
+                            <a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems, false)" title="Filter" class="button button-gray">Filter</a>
+                        </div>
+                    </div>
+                    <div id="information-section" ng-show="informationSection && dataInformation != null">
+                        <a ng-click="closeInformation()">Close</a>                                       
                         <table>
-                            <thead><tr><th></th></tr></thead>
-                            
+                            <thead>
+                                <caption>Document Information</caption>
+                            </thead>                            
+                            <tbody>
+                                <tr ng-show="dataInformation.name != ''"><th>Name:</th><td>{{dataInformation.name}}</td></tr>                                
+                                <tr ng-show="dataInformation.acquisitionID"><th>Acquisition ID:</th><td>{{dataInformation.acquisitionID}}</td></tr>
+                                <tr ng-show="dataInformation.po"><th>PO:</th><td>{{dataInformation.po}}</td></tr>
+                                <tr ng-show="dataInformation.pr"><th>PR:</th><td>{{dataInformation.pr}}</td></tr>
+                                <tr ng-show="dataInformation.projectCode"><th>Project Code:</th><td>{{dataInformation.projectCode}}</td></tr>
+                                <tr ng-show="dataInformation.projectCoordinator"><th>Project Coordinator:</th><td>{{dataInformation.projectCoordinator}}</td></tr>
+                                <tr ng-show="dataInformation.recipient"><th>Recipient:</th><td>{{dataInformation.recipient}}</td></tr>
+                                <tr ng-show="dataInformation.subrecipient"><th>Subrecipient:</th><td>{{dataInformation.subrecipient}}</td></tr>
+                                <tr ng-show="dataInformation.country"><th>Country:</th><td>{{dataInformation.country}}</td></tr>
+                            </tbody>
                         </table>
+                        <p>                            
+                            <strong>Creation Date:</strong> {{dataInformation.creationDate}}<br>
+                            <strong>Last Modification Date:</strong> {{dataInformation.modified}}
+                        </p>
                     </div>                                    
                     <div>                                                                        
                         <div></div>
@@ -119,7 +150,7 @@
                         <div ng-show="noDataAlertVisibility" class="error error-white">
                             No items in this section. Please try another option.
                         </div>
-                        <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems)" title="Get more items" class="button button-gray">Get more items</a></div>
+                        <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems, true)" title="Get more items" class="button button-gray">Get more items</a></div>
                         <div class="large-12 columns page-info" ng-show="toolsVisibility">{{totalDisplayedItems}} of {{totalItems}}</div>                                        
                         <div ng-show="error" class="error error-white">
                             <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.

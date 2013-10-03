@@ -1,7 +1,7 @@
 'use strict';
 
 DigitalLibrary.controller('MenuController', 
-	function MenuController($scope, MenuService, SearchService){
+	function MenuController($scope, $location, $anchorScroll, MenuService, SearchService){
 
 		$scope.menuLoading = true;
 		MenuService.getMenu();
@@ -23,12 +23,16 @@ DigitalLibrary.controller('MenuController',
 			$scope.error = MenuService.error;
 		});
 
-		$scope.searchDocumentFolder = function(departmentName, siteURL){						
+		$scope.searchDocumentFolder = function(departmentName, siteURL){								
 			SearchService.getDocumentFolder(departmentName, siteURL);
+			$location.hash('top');
+			$anchorScroll();
 		};
 
 		$scope.getLastViewed = function(){
 			SearchService.getLastViewed();
+			$location.hash('top');
+			$anchorScroll();
 		};
 	}
 );
