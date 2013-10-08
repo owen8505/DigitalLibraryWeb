@@ -31,7 +31,7 @@ DigitalLibrary.factory('MenuService', function ($rootScope, $resource, $q, $time
 				data.menu = event.GetMenuResult;
 				data.totalItems = data.menu.length;
 				data.menuLoading = false;
-				data.error = false;
+				data.error = false;				
 				data.broadcastMenuResponse();
 			},
 			reject = function(response){

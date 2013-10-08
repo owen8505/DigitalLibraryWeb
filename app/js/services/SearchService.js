@@ -22,7 +22,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 		return filters;
 	}
 
-	data.getDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems, filters){						
+	data.getDocuments = function(libraryID, libraryName, libraryURL, departmentName, siteURL, lastID, totalDisplayedItems, filters){						
 		var params = {};
 		var serviceURL = CONFIG.SERVICE_DOCUMENT_URL;
 
@@ -63,7 +63,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 
 		DocumentServicePromise.then(
 
-			resolve = function(event){				
+			resolve = function(event){						
 				data.subtitle = libraryName;
 				data.elements = event.GetDocumentsResult.items;
 				data.totalItems = event.GetDocumentsResult.totalItems;
@@ -77,6 +77,8 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				data.typeDocument = "document";
 				data.dataLoading = false;
 				data.departmentName = departmentName;
+				data.breadCrumbFolder = [{'departmentName':libraryName, 'siteURL':libraryURL},{'departmentName':departmentName, 'siteURL':siteURL}];
+				console.log(data.breadCrumbFolder);
 
 				if(data.totalItems != 0){
 					data.noElements = false;
@@ -84,8 +86,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 					data.noElements = true;
 				}
 				//console.log(event.GetDocumentsResult);
-				data.lastFolder = {'libraryID':libraryID, 'libraryName':libraryName, 'departmentName':departmentName, 'siteURL':siteURL, 'lastID':event.GetDocumentsResult.lastID, 'totalDisplayedItems':data.totalDisplayedItems}				
-				console.log(data.lastFolder);
+				data.lastFolder = {'libraryID':libraryID, 'libraryName':libraryName, 'departmentName':departmentName, 'siteURL':siteURL, 'lastID':event.GetDocumentsResult.lastID, 'totalDisplayedItems':data.totalDisplayedItems};
 				data.broadcastItems();
 			},
 
@@ -100,6 +101,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 
 		data.dataLoading = true;
 		data.broadcastDataStatus();
+		data.libraryURL = siteURL;
 
 		data.firstLoad = true;
 
@@ -128,6 +130,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				data.typeDocument = "folder";
 				data.dataLoading = false;
 				data.departmentName = departmentName;
+				data.breadCrumbFolder = [{'departmentName':departmentName, 'siteURL':siteURL}];
 				data.totalDisplayedItems = data.totalItems;
 
 				if(data.totalItems != 0){
@@ -172,6 +175,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				data.typeDocument = "document";
 				data.dataLoading = false;
 				data.error = false;
+				data.breadCrumbFolder = [{'departmentName':'Last Viewed', 'siteURL':''}];
 
 				if(typeof elements == 'undefined'){					
 					data.elements = {};

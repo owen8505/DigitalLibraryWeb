@@ -14,6 +14,7 @@ DigitalLibrary.controller('MenuController',
 
 		$scope.$on('handleMenuChange', function(){
 			$scope.menu = MenuService.menu;
+			console.log($scope.menu)
 			$scope.menuLoading = MenuService.menuLoading;
 			$scope.error = MenuService.error;
 		});
@@ -23,7 +24,7 @@ DigitalLibrary.controller('MenuController',
 			$scope.error = MenuService.error;
 		});
 
-		$scope.searchDocumentFolder = function(departmentName, siteURL){								
+		$scope.searchDocumentFolder = function(departmentName, siteURL){										
 			SearchService.getDocumentFolder(departmentName, siteURL);
 			$location.hash('top');
 			$anchorScroll();

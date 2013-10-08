@@ -7,6 +7,7 @@ DigitalLibrary.controller('LibraryController',
 		$scope.elements = {};
 		$scope.view = "large-3";
 		$scope.departmentName = "";
+		$scope.libraryURL = "";
 
 		//Visibility variables
 		$scope.dataLoading = false;
@@ -64,7 +65,7 @@ DigitalLibrary.controller('LibraryController',
 			$scope.informationSection = false;
 		}
 
-		$scope.showInformation = function(element, $event){
+		$scope.showInformation = function(element, $event){			
 			$event.cancelBubble = true;
 			$scope.informationSection = true;
 			$scope.dataInformation = element;
@@ -84,7 +85,8 @@ DigitalLibrary.controller('LibraryController',
 			window.location.href = mail;
 		}
 
-		$scope.openDocument = function(document){
+		$scope.openDocument = function(document, $event){
+			$event.cancelBubble = true;
 			$scope.informationSection = false;
 			window.open(document.url);			
 			SearchService.setLastViewed(document);
@@ -93,7 +95,7 @@ DigitalLibrary.controller('LibraryController',
 
 		$scope.searchDocuments = function(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems, moreInfo){			
 			$scope.informationSection = false;			
-			SearchService.getDocuments(libraryID, libraryName, departmentName, siteURL, lastID, totalDisplayedItems);			
+			SearchService.getDocuments(libraryID, libraryName, $scope.libraryURL, departmentName, siteURL, lastID, totalDisplayedItems);			
 			if(!moreInfo){
 				$location.hash('top');
 				$anchorScroll();
@@ -106,6 +108,18 @@ DigitalLibrary.controller('LibraryController',
 			}else{
 				$scope.view = "large-12";
 			}
+		};
+
+		$scope.searchDocumentFolder = function(departmentName, siteURL){			
+			SearchService.getDocumentFolder(departmentName, siteURL);
+			$location.hash('top');
+			$anchorScroll();
+		};
+
+		$scope.getLastViewed = function(){
+			SearchService.getLastViewed();
+			$location.hash('top');
+			$anchorScroll();
 		};
 
 		$scope.$on('handleDataStatus', function(){
@@ -126,6 +140,13 @@ DigitalLibrary.controller('LibraryController',
 			$scope.totalDisplayedItems = SearchService.totalDisplayedItems;
 			$scope.dataLoading = SearchService.dataLoading;
 			$scope.error = SearchService.error;
+			$scope.libraryURL = SearchService.libraryURL;
+
+			console.log(SearchService.breadCrumbFolder);
+
+			if(SearchService.breadCrumbFolder.length > 0){
+				$scope.breadcrumb = SearchService.breadCrumbFolder;
+			}
 
 			$scope.setVisibility();
 

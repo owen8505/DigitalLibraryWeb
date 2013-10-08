@@ -30,6 +30,7 @@
 
         <div id="main-container" class="row">  
             <aside id="navigation" class="large-3 columns">
+                <!--
                 <div id="search">
                     <form id="search-form">
                         <input type="search" placeholder="Search documents">
@@ -37,14 +38,14 @@
                 </div>
 
                 <hr class="separator-1">
-                
+                -->
                 <h3>Departments</h3>         
                 <nav ng-controller="MenuController">
                     <div class="spiner spiner-white" ng-show="menuLoading"><img src="img/ajax-loader-gray.gif" alt="Loading data..."> Updating data...</div>                 
                     <ul class="nav-department" ng-show="!error">
-                        <li ng-show="!menuLoading"><span class="icon-bookmark"></span> <a ng-click="getLastViewed()" title="Last Viewed">Last Viewed</a></li>
+                        <li ng-show="!menuLoading"><span class="icon-bookmark"></span> <a ng-click="getLastViewed()" title="Last Viewed">Last Viewed</a></li>                      
                         <li ng-repeat="department in menu" ng-hide="department.functionalArea.length == 0">
-                            <span class="icon-books"></span> {{deparment.name}}
+                            <span class="icon-books"></span> {{department.name}}
                             <ul class="nav-functonal-area">
                                 <li ng-repeat="fa in department.functionalArea"><a ng-click="searchDocumentFolder(fa.name, fa.url)">{{fa.name}}</a></li>
                             </ul>
@@ -64,22 +65,27 @@
                     <h4 ng-show="!dataLoading">{{subtitle}} ({{totalItems}})</h4>
                     <hr ng-show="!dataLoading">
 
-                    <!-- Breadcrumb -->
-                    <div id="breadcrumb" ng-show="toolsVisibility">
-                            <a ng-click="switchView('list')" title="List View">{{breadcrumb}}</a>
-                    </div>
-
                     <!-- Tools bar -->
                     <div id="tools" ng-show="toolsVisibility">
+                        <!--
                         <div id="search-filter">
                             <form id="search-filter-form">
                                 <input type="search" placeholder="Search {{subtitle}}">
                             </form>
-                        </div>
+                        </div>-->
                         <a ng-click="showFilters()" title="Filters" ng-show="typeDocument == 'document' && subtitle != 'Last Viewed' " ng-class="{true:'selected filter', false:'filter'}[filtersSection]"><span class="icon-filter"></span></a>
                         <a ng-click="switchView('group')" title="Table View" ng-class="{true:'selected', false:''}[view=='large-3']"><span class="icon-icons"></span></a>
                         <a ng-click="switchView('list')" title="List View" ng-class="{true:'selected', false:''}[view=='large-12']"><span class="icon-list-2"></span></a>                         
                         <div class="clear"></div>
+                    </div>
+
+                    <!-- Breadcrumb -->
+                    <div id="breadcrumb" ng-show="toolsVisibility">
+                            <a ng-click="getLastViewed()" title="List View">Document Library</a>
+                            <span ng-show="breadcrumb.length > 0"> / 
+                                <span ng-show="breadcrumb.length == 1"> {{breadcrumb[0].departmentName}} </span>
+                                <span ng-show="breadcrumb.length > 1"> <a ng-click="searchDocumentFolder(breadcrumb[0].departmentName, breadcrumb[0].siteURL)">{{breadcrumb[1].departmentName}}</a> / {{breadcrumb[0].departmentName}} </span>
+                            </span>
                     </div>
                 </div>                
 
@@ -134,7 +140,7 @@
                             </div>
                         </section>                    
                         
-                        <section ng-show="typeDocument == 'document' && toolsVisibility" ng-repeat="document in elements" class="{{view}} columns document-info left" ng-click="openDocument(document)" >
+                        <section ng-show="typeDocument == 'document' && toolsVisibility" ng-repeat="document in elements" class="{{view}} columns document-info left" ng-click="openDocument(document, $event)" >
                             <div class="document-info-content">                            
                                 <a ng-click="sendMail(document.name, document.url, $event);" title="Share Document"><span class="icon-envelope icon-element-samepage"></span></a>
                                 <a ng-click="showInformation(document, $event)" title="Information"><span class="icon-info icon-element-information"></span></a>
@@ -160,10 +166,6 @@
                 </div>      
             </div>  
         </div>               
-        
-
-        <!-- jQuery -->
-        <script type="text/javascript" src="js/vendor/jquery-1.10.1.min.js"></script>
 
         <!-- External Modules -->     
         <script type="text/javascript" src="js/angular.min.js"></script>
