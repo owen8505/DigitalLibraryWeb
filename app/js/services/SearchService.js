@@ -12,28 +12,72 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 	data.totalDisplayedItems = 0;
 	data.firstLoad = true;
 	data.lastFolder = {};
+	data.searching = false;
 
-	data.getFilters = function(filtersSelected){
-		var filters = [
-			{'name':'Recipient', 'type':'checkbox', 'options':[{'id':1, 'value':'SSP'},{'id':2, 'value':'SEGOB'}]},
-			{'name':'Recipient', 'type':'checkbox', 'options':[{'id':1, 'value':'SSP'},{'id':2, 'value':'SEGOB'}]},
-		];
+	data.getDocumentsByFilters = function(params, lastID, totalDisplayedItems){
+		
+		if(totalDisplayedItems == 0){
+			data.totalDisplayedItems = 0;
+			data.firstLoad = true;			
+		}else{
+			data.totalDisplayedItems = totalDisplayedItems;
+			data.firstLoad = false;			
+		}
+		
+		data.dataLoading = true;		
+		data.broadcastDataStatus();
+		
+		var deferred = $q.defer();
+		var FilterDocumentServicePromise = deferred.promise;
+		var FilterDocumentService = $resource(CONFIG.SERVICE_FILTER_DOCUMENTS,{})
+		.get({p:params,b:CONFIG.DOCUMENT_BATCH,i:lastID},
 
-		return filters;
+			success = function(event){					
+				deferred.resolve(event);				
+			},
+
+			error = function(respose){
+				error = true;
+				console.log("Error retreving the data");
+			}
+
+		);
+
+		FilterDocumentServicePromise.then(
+			resolve = function(event){						
+				data.subtitle = 'Search Results';
+				data.elements = event.SearchDocumentsResult.items;
+				data.totalItems = event.SearchDocumentsResult.totalItems;
+
+				if(data.totalItems < CONFIG.DOCUMENT_BATCH){
+					data.totalDisplayedItems = data.totalItems;
+				}else{
+					data.totalDisplayedItems = data.totalDisplayedItems + CONFIG.DOCUMENT_BATCH;
+				}
+
+				data.typeDocument = "document";
+				data.searching = true;
+				data.dataLoading = false;
+				data.lastFolder = {'lastID':event.SearchDocumentsResult.lastID, 'totalDisplayedItems':data.totalDisplayedItems};
+				data.breadCrumbFolder = [{'departmentName':'Search Result', 'siteURL':''}];
+
+				if(data.totalItems != 0){
+					data.noElements = false;
+				}else{
+					data.noElements = true;
+				}
+
+				data.broadcastItems();
+			},
+
+			reject = function(response){
+				data.error = true;
+				console.log(response);
+			}
+		);
 	}
 
-	data.getDocuments = function(libraryID, libraryName, libraryURL, departmentName, siteURL, lastID, totalDisplayedItems, filters){						
-		var params = {};
-		var serviceURL = CONFIG.SERVICE_DOCUMENT_URL;
-
-		if(filters == 'undefined'){
-			serviceURL = CONFIG.SERVICE_SEARCH_DOCUMENT_URL;
-			params = {};
-
-		}else{
-			serviceURL = CONFIG.SERVICE_DOCUMENT_URL;
-			params = filters;
-		}
+	data.getDocuments = function(libraryID, libraryName, libraryURL, departmentName, siteURL, lastID, totalDisplayedItems){
 
 		if(totalDisplayedItems == 0){
 			data.totalDisplayedItems = 0;
@@ -75,10 +119,10 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				}
 
 				data.typeDocument = "document";
+				data.searching = false;
 				data.dataLoading = false;
 				data.departmentName = departmentName;
-				data.breadCrumbFolder = [{'departmentName':libraryName, 'siteURL':libraryURL},{'departmentName':departmentName, 'siteURL':siteURL}];
-				console.log(data.breadCrumbFolder);
+				data.breadCrumbFolder = [{'departmentName':libraryName, 'siteURL':libraryURL},{'departmentName':departmentName, 'siteURL':siteURL}];				
 
 				if(data.totalItems != 0){
 					data.noElements = false;
@@ -129,6 +173,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				data.totalItems = data.elements.length;
 				data.typeDocument = "folder";
 				data.dataLoading = false;
+				data.searching = false;
 				data.departmentName = departmentName;
 				data.breadCrumbFolder = [{'departmentName':departmentName, 'siteURL':siteURL}];
 				data.totalDisplayedItems = data.totalItems;
@@ -174,6 +219,7 @@ DigitalLibrary.factory('SearchService', function ($rootScope, $resource, $cookie
 				data.subtitle = 'Last Viewed';				
 				data.typeDocument = "document";
 				data.dataLoading = false;
+				data.searching = false;
 				data.error = false;
 				data.breadCrumbFolder = [{'departmentName':'Last Viewed', 'siteURL':''}];
 

@@ -145,10 +145,13 @@ a{
 	color: #454545;
 }
 
+aside{
+	position: fixed !important;
+}
+
 body,html{
 	/*background: #3d3d3d url('../img/low_contrast_linen_@2X.png') repeat top left;/*
 	/*background: #17202B url('../img/bkg-nas-mexico.png') no-repeat top left;*/
-	background-color: #121212;
 	background-size: 100%;
 	margin: 0;
 	padding: 0;
@@ -172,12 +175,16 @@ header{
 
 header h1{
 	color: #999;
-	/*font-family: 'Open Sans';*/
+	display: inline-block;
 	font-family: 'News Gothic MT';
 	font-size: 3rem;
 	font-weight: 300;
 	margin: 1rem 0rem 1.5rem;
-	/*text-shadow: black 0.1em 0.1em 0.2em;*/
+}
+
+header img{
+	max-width: 100px;
+	width: 100%;
 }
 
 header h1 a{
@@ -218,15 +225,23 @@ table th{
 
 ul.nav-department{
 	margin: 1rem;
-	padding: 0px;
+	padding: 0px;	
 }
 
 ul.nav-department > li{
-	color: #707777;
+	color: #9BA7B9;
 	font-size: 1rem;
 	font-weight: normal;
 	padding: 0.5rem 1.5rem 0.8rem;
 	text-transform: uppercase;
+}
+
+ul.nav-department a{
+	color: #b8bbbb !important;
+	font-size: 0.9rem;
+	font-weight: 300;
+	margin-left: 0px;
+	text-transform: none;
 }
 
 ul.nav-department  ul.nav-functonal-area{
@@ -239,6 +254,10 @@ ul.nav-department  ul.nav-functonal-area{
 
 ul.nav-department  ul.nav-functonal-area a{
 	color: #b8bbbb;
+}
+
+ul.nav-department  a.selected{
+	color: #00FFFF !important;
 }
 
 ul.nav-department  ul.nav-functonal-area li{
@@ -259,6 +278,7 @@ ul.nav-department  ul.nav-functonal-area li{
 
 #content{
 	/*background-color: #d3d3d3;*/
+	overflow: scroll !important;
 	padding: 1rem 1rem;
 }
 
@@ -268,6 +288,10 @@ ul.nav-department  ul.nav-functonal-area li{
 
 #content #info h4{
 	margin: 0.65rem 0rem;
+}
+
+#content .subtitle{
+	margin: 0.55rem 0rem;
 }
 
 #filter-section{
@@ -285,12 +309,63 @@ ul.nav-department  ul.nav-functonal-area li{
 	text-decoration: underline;
 }
 
+#filter-section .filter-button{
+	margin-top: 2rem;
+}
+
 #filter-section h5{
 	margin-bottom: 0.8rem;
 }
 
 #filter-section span{
+	display: inline-block;
+	margin: 0rem 1rem 1rem;
 	font-size: 0.8rem;
+	vertical-align: top;
+	width: 25%;
+}
+
+#filter-section span.toggleSpan{
+	margin: 0rem 1rem 0rem;
+}
+
+#filter-section span.toggleSpan input{
+	margin: 0rem;
+}
+
+#filter-section label{
+	margin: 1rem 0.4rem 0.8rem;
+	vertical-align: middle;
+	width: 100%;
+}
+
+#filter-section .filter-option-checkbox{
+	display: inline-block;
+	vertical-align: top;
+	width: 5%;
+}
+
+#filter-section .filter-option-name{
+	display: inline-block;
+	margin-left: 5%;
+	vertical-align: top;
+	width: 90%;
+}
+
+#header-wrapper{
+	color: #fff;
+	text-align: center;
+}
+
+#header-wrapper img{
+	max-width: 40px;
+	width: 100%;
+}
+
+#header-wrapper h1{	
+	color: #fff;
+	font-size: 1rem;
+	margin: 0.4rem 0rem 1rem;
 }
 
 #information-section{
@@ -318,10 +393,13 @@ ul.nav-department  ul.nav-functonal-area li{
 }
 
 #navigation{
-	background-color: #2A2A2A;	
+	background-color: #2E343E;	
 	/*font-family: 'Open Sans';*/
 	font-family: 'News Gothic MT';
 	font-weight: 300;
+	height: 800px;
+	min-height: 800px;
+	overflow: scroll;
 	padding: 1rem 0rem;
 	position: relative;
 }
@@ -336,7 +414,8 @@ ul.nav-department  ul.nav-functonal-area li{
 }
 
 #navigation nav{
-	margin: 1rem 0rem;
+	margin: 1rem 0rem;	
+	position: relative;
 }
 
 #search-filter{
@@ -405,7 +484,8 @@ ul.nav-department  ul.nav-functonal-area li{
 	border-right:10px solid white; 
 	position: absolute;
 	right: 0px;
-	top: 145px;
+	top: 160px;
+	transition:all 1.0s ease-in-out;
 }
 
 .background{
@@ -476,8 +556,16 @@ ul.nav-department  ul.nav-functonal-area li{
 	color: #707777;
 }
 
+.error-searching{
+	background-color: #F5D7D0;
+	border: 1px solid #D14836;
+	color: #D14836;
+	padding: 1rem 0rem 0.2rem;
+}
+
 .filter{
-	border-right: 1px solid #CCC;	
+	float: right;
+	margin: 0rem 0rem 0.5rem;
 }
 
 .large-3 h5.document-title{
@@ -607,6 +695,12 @@ ul.nav-department  ul.nav-functonal-area li{
 	text-align: center;
 }
 
+.row{
+	margin-left: 0px;
+	margin-right: 0px;
+	max-width: 100%;
+}
+
 .selected{
 	color: #219EDC;
 }
@@ -626,4 +720,16 @@ ul.nav-department  ul.nav-functonal-area li{
 
 .text-bold{
 	font-weight: bold;
+}
+
+.toggleButton{
+	background-color: #EEE;
+	border-radius: 0px;
+	border: 1px solid #2A2A2A;
+	display: inline-block;
+	font-size: 10px;
+	height: 18px;
+	padding: 2px 5px;
+	text-align: center;
+	width: 18px;
 }

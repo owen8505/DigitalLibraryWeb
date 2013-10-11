@@ -18,51 +18,87 @@
 
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body>
+    <body id="top">
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
+        <!--
         <header class="row">
             <div id="header-wrapper">
-                <h1 id="top">Digital Library</h1>
+                <img src="img/SecureGOV-logo.png" alt="SecureGOV Logo" >
+                <h1 id="top">SecureGOV</h1>
             </div>         
-        </header>    
+        </header>    -->
 
         <div id="main-container" class="row">  
+
             <aside id="navigation" class="large-3 columns">
+                <div id="left-arrow" ng-cloak class="arrow-left" ng-show="!menuLoading"></div>
+                 <div id="header-wrapper">                    
+                    <img src="img/SecureGOV-logo.png" alt="SecureGOV Logo" >
+                    <h1>SecureGOV</h1>                    
+                </div> 
                 <!--
                 <div id="search">
                     <form id="search-form">
                         <input type="search" placeholder="Search documents">
                     </form>
                 </div>
-
-                <hr class="separator-1">
                 -->
+                <hr class="separator-1">
+                
                 <h3>Departments</h3>         
-                <nav ng-controller="MenuController">
-                    <div class="spiner spiner-white" ng-show="menuLoading"><img src="img/ajax-loader-gray.gif" alt="Loading data..."> Updating data...</div>                 
-                    <ul class="nav-department" ng-show="!error">
-                        <li ng-show="!menuLoading"><span class="icon-bookmark"></span> <a ng-click="getLastViewed()" title="Last Viewed">Last Viewed</a></li>                      
+                <nav ng-controller="MenuController" ng-init="init()">                    
+                    <div  class="spiner spiner-white" ng-show="menuLoading"><img src="img/ajax-loader-gray.gif" alt="Loading data..."> Updating data...</div>                 
+                    <ul ng-cloak class="nav-department" ng-show="!error">
+                        <li ng-show="!menuLoading"><a id="LastViewed" class="selected" ng-click="getLastViewed()" title="Last Viewed"><span class="icon-bookmark"></span> Last Viewed</a></li>                      
                         <li ng-repeat="department in menu" ng-hide="department.functionalArea.length == 0">
                             <span class="icon-books"></span> {{department.name}}
                             <ul class="nav-functonal-area">
-                                <li ng-repeat="fa in department.functionalArea"><a ng-click="searchDocumentFolder(fa.name, fa.url)">{{fa.name}}</a></li>
+                                <li ng-repeat="fa in department.functionalArea"><a id="functionalArea{{fa.id}}" ng-click="searchDocumentFolder(fa.id, fa.name, fa.url)">{{fa.name}}</a></li>
                             </ul>
                         </li>                     
                     </ul>
-                    <div ng-show="error" class="error error-white">
+                    <div ng-cloak ng-show="error" class="error error-white">
                         <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.
                         <span><a ng-click="getMenu()" title="Try again" class="button button-orange">Try again</a></span>
                     </div>
-                </nav>
-                <div MenuPointerDirective class="arrow-left"></div>
+                </nav>                
             </aside>  
 
-            <div id="content" class="large-9 columns" ng-controller="LibraryController">                 
+            <div id="content" class="large-9 columns" ng-controller="LibraryController" ng-cloak> 
+                <div>
+                    <a ng-click="showFilters()" title="Filters" ng-show="!dataLoading" ng-class="{true:'selected filter', false:'filter'}[filtersSection]">Advanced Search</a>
+                    <div class="clear"></div>
+                </div>
+                <div id="filter-section" ng-show="filtersSection">
+                        <a ng-click="closeFilters()">Close</a>
+                        <h5>Advanced Search</h5>
+                        <div class="error-description error-searching" ng-show="filtersError">
+                            <span class="icon-warning error-description"></span> Please, enter your search criteria.
+                        </div>
+                        <form id="advancedSearch">
+                            <div ng-repeat="filter in filters">
+                                <label>
+                                    <a id="{{filter.internalName}}Button"  class="toggleButton" ng-click="toggleOptions(filter.internalName)">+</a> {{filter.name}}:<span class="toggleSpan" ng-show="filter.type == 'checkbox'">All <input type="checkbox" value="filter.internalName" ng-model="confirmed"></span>
+                                </label>
+                                <div class="{{filter.internalName}}" style="display:none;">
+                                    <span ng-show="filter.type == 'textbox'">
+                                        <input id="{{filter.internalName}}" name="{{filter.internalName}}" type="textbox" >
+                                    </span>                                
+                                    <span ng-show="filter.type == 'checkbox'" ng-repeat="option in filter.options">
+                                        <div class="filter-option-checkbox"><input name="{{filter.internalName}}" ng-model="confirmed" type="checkbox" value="{{option.id}}"> </div><div class="filter-option-name">{{option.value}}</div>
+                                    </span>
+                                </div>                            
+                            </div>
+                            <div class="filter-button">
+                                <a ng-click="searchDocumentsByFilters(1,0)" title="Filter" class="button button-gray">Search</a>
+                            </div>
+                        </form>
+                    </div>                
                 <div>                               
                     <!-- Title of the selected section-->
-                    <h4 ng-show="!dataLoading">{{subtitle}} ({{totalItems}})</h4>
+                    <h4 ng-show="!dataLoading" class="subtitle">{{subtitle}} ({{totalItems}})</h4>
                     <hr ng-show="!dataLoading">
 
                     <!-- Tools bar -->
@@ -72,8 +108,7 @@
                             <form id="search-filter-form">
                                 <input type="search" placeholder="Search {{subtitle}}">
                             </form>
-                        </div>-->
-                        <a ng-click="showFilters()" title="Filters" ng-show="typeDocument == 'document' && subtitle != 'Last Viewed' " ng-class="{true:'selected filter', false:'filter'}[filtersSection]"><span class="icon-filter"></span></a>
+                        </div>-->                        
                         <a ng-click="switchView('group')" title="Table View" ng-class="{true:'selected', false:''}[view=='large-3']"><span class="icon-icons"></span></a>
                         <a ng-click="switchView('list')" title="List View" ng-class="{true:'selected', false:''}[view=='large-12']"><span class="icon-list-2"></span></a>                         
                         <div class="clear"></div>
@@ -84,26 +119,13 @@
                             <a ng-click="getLastViewed()" title="List View">Document Library</a>
                             <span ng-show="breadcrumb.length > 0"> / 
                                 <span ng-show="breadcrumb.length == 1"> {{breadcrumb[0].departmentName}} </span>
-                                <span ng-show="breadcrumb.length > 1"> <a ng-click="searchDocumentFolder(breadcrumb[0].departmentName, breadcrumb[0].siteURL)">{{breadcrumb[1].departmentName}}</a> / {{breadcrumb[0].departmentName}} </span>
+                                <span ng-show="breadcrumb.length > 1"> <a ng-click="searchDocumentFolder(breadcrumb[1].departmentName, breadcrumb[0].siteURL)">{{breadcrumb[1].departmentName}}</a> / {{breadcrumb[0].departmentName}} </span>
                             </span>
                     </div>
                 </div>                
 
                 <!-- Sección que contiene los elementos -->
-                <div id="info" class="rows">                    
-                    <div id="filter-section" ng-show="filtersSection">
-                        <a ng-click="closeFilters()">Close</a>
-                        <h5>Filters</h5>       
-                        <div ng-repeat="filter in filters">
-                            <label>{{filter.name}}:</label>
-                            <span ng-repeat="option in filter.options">                          
-                                {{option.value}} <input type="checkbox" value="{{option.id}}">                          
-                            </span>
-                        </div>
-                        <div>
-                            <a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems, false)" title="Filter" class="button button-gray">Filter</a>
-                        </div>
-                    </div>
+                <div id="info" class="rows">                                        
                     <div id="information-section" ng-show="informationSection && dataInformation != null">
                         <a ng-click="closeInformation()">Close</a>                                       
                         <table>
@@ -156,7 +178,8 @@
                         <div ng-show="noDataAlertVisibility" class="error error-white">
                             No items in this section. Please try another option.
                         </div>
-                        <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems, true)" title="Get more items" class="button button-gray">Get more items</a></div>
+                        <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems && !searching"><a ng-click="searchDocuments(lastFolder.libraryID, lastFolder.libraryName, lastFolder.departmentName, lastFolder.siteURL, lastFolder.lastID, lastFolder.totalDisplayedItems, true)" title="Get more items" class="button button-gray">Get more items</a></div>
+                        <div class="large-12 columns pagination" ng-show="toolsVisibility && totalItems > totalDisplayedItems && searching"><a ng-click="searchDocumentsByFilters(lastFolder.lastID, lastFolder.totalDisplayedItems)" title="Get more  items" class="button button-gray">Get more items</a></div>
                         <div class="large-12 columns page-info" ng-show="toolsVisibility">{{totalDisplayedItems}} of {{totalItems}}</div>                                        
                         <div ng-show="error" class="error error-white">
                             <span class="icon-warning error-description"></span>Sorry, we are not able to stablish communication. Please try again in a few minutes.
@@ -166,6 +189,9 @@
                 </div>      
             </div>  
         </div>               
+
+        <!-- Aux Libraries -->
+        <script type="text/javascript" src="js/vendor/jquery-1.10.1.min.js"></script>
 
         <!-- External Modules -->     
         <script type="text/javascript" src="js/angular.min.js"></script>
@@ -179,11 +205,12 @@
 
         <!-- Services -->
         <script type="text/javascript" src="js/services/MenuService.js"></script>
-        <script type="text/javascript" src="js/services/SearchService.js"></script>        
+        <script type="text/javascript" src="js/services/SearchService.js"></script>
+        <script type="text/javascript" src="js/services/FiltersService.js"></script>        
 
         <!-- Controllers -->
         <script type="text/javascript" src="js/controllers/MenuController.js"></script>
-        <script type="text/javascript" src="js/controllers/LibraryController.js"></script> 
+        <script type="text/javascript" src="js/controllers/LibraryController.js"></script>         
 
         <!-- Directives -->
         <script type="text/javascript" src="js/directives/MenuPointerDirective.js"></script>
